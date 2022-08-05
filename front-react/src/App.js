@@ -1,6 +1,6 @@
 import './App.css';
 import {Home} from './pages/Home';
-import {Restaurants} from './pages/Restaurants';
+import {Restaurant} from './pages/Restaurant';
 import {BrowserRouter, Route, Routes, NavLink} from "react-router-dom";
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
             </NavLink>
           </li>
           <li className="nav-item m-1">
-            <NavLink className="btn btn-light btn-outline-primary" to="/restaurants">
+            <NavLink className="btn btn-light btn-outline-primary" to="/restaurant">
               Restaurants
             </NavLink>
           </li>
@@ -28,7 +28,7 @@ function App() {
 
       <Routes>
         <Route path='/home' element={<Home/>}/>
-        <Route path='/restaurants' element={<Restaurants/>}/>
+        <Route path='/restaurant' element={<Restaurant/>}/>
       </Routes>
     </div>
     </BrowserRouter>

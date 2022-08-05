@@ -6,7 +6,6 @@ export class Home extends Component{
         return(
             <div>
                 <h3>This is a Home page</h3>
-                <p>{variables.API_URL}</p>
             </div>
         )
     }

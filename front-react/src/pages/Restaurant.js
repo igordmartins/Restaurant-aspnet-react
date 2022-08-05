@@ -1,4 +1,3 @@
-import { tsConstructorType } from '@babel/types';
 import React,{Component} from 'react';
 import {variables} from "../Variables.js";
 
@@ -13,7 +12,9 @@ export class Restaurant extends Component{
             RestaurantName:"",
             RestaurantAddress:"",
             RestaurantDescription:"",
-            RestaurantId:0          
+            RestaurantPhoto:"mcdonalds.png",
+            RestaurantId:0,
+            PhotoPath:variables.PHOTO_URL
         }
     }
 
@@ -33,11 +34,26 @@ export class Restaurant extends Component{
         this.setState({RestaurantName:e.target.value});
     }
 
+    changeRestaurantAddress = (e)=>{
+        this.setState({RestaurantAddress:e.target.value});
+    }
+
+    changeRestaurantDescription = (e)=>{
+        this.setState({RestaurantDescription:e.target.value});
+    }
+
+    changeRestaurantPhoto = (e)=>{
+        this.setState({RestaurantPhoto:e.target.value});
+    }
+
     addClick(rest){
         this.setState({
             modalTitle:'Add Restaurant',
             RestaurantId:0,
-            RestaurantName:''
+            RestaurantName:'',
+            RestaurantAddress:'',
+            RestaurantDescription:'',
+            RestaurantPhoto:"mcdonalds.png"
         });
     }
 
@@ -45,7 +61,10 @@ export class Restaurant extends Component{
         this.setState({
             modalTitle:'Edit Restaurant',
             RestaurantId:rest.RestaurantId,
-            RestaurantName:rest.RestaurantName
+            RestaurantName:rest.RestaurantName,
+            RestaurantAddress:rest.RestaurantAddress,
+            RestaurantDescription:rest.RestaurantDescription,
+            RestaurantPhoto:rest.RestaurantPhoto
         });
     }
 
@@ -57,7 +76,10 @@ export class Restaurant extends Component{
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-                RestaurantName:this.state.RestaurantName
+                RestaurantName:this.state.RestaurantName,
+                RestaurantAddress:this.state.RestaurantAddress,
+                RestaurantDescription:this.state.RestaurantDescription,
+                RestaurantPhoto:this.state.RestaurantPhoto
             })
         })
         .then(res=>res.json())
@@ -80,7 +102,8 @@ export class Restaurant extends Component{
                 RestaurantId:this.state.RestaurantId,
                 RestaurantName:this.state.RestaurantName,
                 RestaurantAddress:this.state.RestaurantAddress,
-                RestaurantDescription:this.state.RestaurantDescription
+                RestaurantDescription:this.state.RestaurantDescription,
+                RestaurantPhoto:this.state.RestaurantPhoto
             })
         })
         .then(res=>res.json())
@@ -111,6 +134,21 @@ export class Restaurant extends Component{
         }
     }
 
+    imageUpload=(e)=>{
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('file', e.target.file[0], e.target.files[0].name);
+        fetch(variables.API_URL+'restaurants/savefile', {
+            method:'POST',
+            body:formData
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            this.setState({RestaurantPhoto:data});
+        })
+    }
+
 
 
     render(){
@@ -120,7 +158,9 @@ export class Restaurant extends Component{
             RestaurantName,
             RestaurantAddress,
             RestaurantDescription,
-            RestaurantId
+            RestaurantId,
+            RestaurantPhoto,
+            PhotoPath
         }=this.state
         return(
             <div>
@@ -135,16 +175,16 @@ export class Restaurant extends Component{
                     <thead>
                         <tr>
                             <th>
-                                Restaurant Id
+                                ID
                             </th>
                             <th>
-                                Restaurant Name
+                                Name
                             </th>
                             <th>
-                                Restaurant Address
+                                Address
                             </th>
                             <th>
-                                Restaurant Description
+                                Description
                             </th>
                             <th>
                                 Options
@@ -188,28 +228,47 @@ export class Restaurant extends Component{
                                 <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                             </div>
                             <div className='modal-body'>
-                                <div className='input-group mb-3'>
-                                    <span className='input-group-text'> Restaurant Name</span>
-                                    <input type='text' className='form-control'
-                                    value={RestaurantName}
-                                    onChange={this.changeRestaurantName}/>
+                                <div className='d-flex flex-rox bd-highlight mb-3'>
+                                    <div className='p-2 w-50 bd-highlight'>
+                                        <div className='input-group mb-3'>
+                                            <span className='input-group-text'>Name</span>
+                                            <input type='text' className='form-control'
+                                            value={RestaurantName}
+                                            onChange={this.changeRestaurantName}/>
+                                        </div>
+                                        <div className='input-group mb-3'>
+                                            <span className='input-group-text'>Address</span>
+                                            <input type='text' className='form-control'
+                                            value={RestaurantAddress}
+                                            onChange={this.changeRestaurantAddress}/>
+                                        </div>
+                                        <div className='input-group mb-3'>
+                                            <span className='input-group-text'>Description</span>
+                                            <input type='text' className='form-control'
+                                            value={RestaurantDescription}
+                                            onChange={this.changeRestaurantDescription}/>
+                                        </div>
+                                    </div>
+                                    <div className='p-2 w-50 bd-highlight'>
+                                        <img width='250px' height='250px'
+                                        src={PhotoPath+RestaurantPhoto}/>
+                                        <input className='m-2' type='file' onChange={this.imageUpload}/>
+                                    </div>
                                 </div>
 
-                                {RestaurantId===0?
-                                <button type='button'
-                                className='btn btn-primary float-start'
-                                onClick={()=>this.createClick()}
-                                >Create</button>
-                                :null}
+                                    {RestaurantId===0?
+                                    <button type='button'
+                                    className='btn btn-primary float-start'
+                                    onClick={()=>this.createClick()}
+                                    >Create</button>
+                                    :null}
 
-                                {RestaurantId!==0?
-                                <button type='button'
-                                className='btn btn-primary float-start'
-                                onClick={()=>this.updateClick()}
-                                >Update</button>
-                                :null}
-
-                                
+                                    {RestaurantId!==0?
+                                    <button type='button'
+                                    className='btn btn-primary float-start'
+                                    onClick={()=>this.updateClick()}
+                                    >Update</button>
+                                    :null}
                             </div>
 
                         </div>

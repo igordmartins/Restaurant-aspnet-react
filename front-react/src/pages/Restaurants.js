@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Variables} from "../Variables.js"
+import {variables} from "../Variables.js"
 
 export class Restaurants extends Component{
 

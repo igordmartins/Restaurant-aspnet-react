@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {variables} from "../Variables.js"
+// import {variables} from "../Variables.js"
 
 export class Home extends Component{
     render(){

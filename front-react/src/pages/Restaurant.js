@@ -12,7 +12,7 @@ export class Restaurant extends Component{
             RestaurantName:"",
             RestaurantAddress:"",
             RestaurantDescription:"",
-            RestaurantPhoto:"mcdonalds.png",
+            RestaurantPhoto:"default.png",
             RestaurantId:0,
             PhotoPath:variables.PHOTO_URL
         }
@@ -53,7 +53,7 @@ export class Restaurant extends Component{
             RestaurantName:'',
             RestaurantAddress:'',
             RestaurantDescription:'',
-            RestaurantPhoto:"mcdonalds.png"
+            RestaurantPhoto:"default.png"
         });
     }
 
@@ -138,7 +138,7 @@ export class Restaurant extends Component{
         e.preventDefault();
 
         const formData = new FormData();
-        formData.append('file', e.target.file[0], e.target.files[0].name);
+        formData.append('file', e.target.files[0], e.target.files[0].name);
         fetch(variables.API_URL+'restaurants/savefile', {
             method:'POST',
             body:formData
